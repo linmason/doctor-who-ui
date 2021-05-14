@@ -46,6 +46,7 @@ const load_doctors = () => {
 
 const load_doctor_page = (doctor_id) => {
     console.log("load doctor")
+    document.querySelector("#companions").innerHTML = ``
     fetch(`/doctors/${doctor_id}`)
         .then(response => response.json())
         .then(data => {
@@ -97,6 +98,7 @@ const delete_doctor = (doctor_id) => {
             }
         )
             .then(data => {
+                console.log(data)
                 load_doctors()
                 document.querySelector("#doctor").innerHTML = `selected doctor goes here`
             })
@@ -109,7 +111,11 @@ const delete_doctor = (doctor_id) => {
 const load_companions_page = (doctor_id) => {
     console.log("load companion")
     fetch(`/doctors/${doctor_id}/companions`)
-        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            if (!response.ok) {document.querySelector("#companions").innerHTML = ``}
+            else {return response.json()}
+        })
         .then(data => {
             console.log(data)
             render_companions(data)
@@ -117,6 +123,12 @@ const load_companions_page = (doctor_id) => {
 }
 
 const render_companions = (companion_objs) => {
+    console.log(companion_objs)
+    if (companion_objs == []) {
+        console.log("no caompanions")
+        document.querySelector("#companions").innerHTML = ``
+        return
+    }
     for (let companion_obj of companion_objs) {
         let companion_template = `
         <article>
@@ -124,7 +136,7 @@ const render_companions = (companion_objs) => {
             <h3>${companion_obj.name}</h3>
         </article>
         `
-        document.querySelector("#companions").innerHTML += companion_template
+        document.querySelector("#companions").innerHTML = companion_template
     }
 }
 
@@ -136,6 +148,7 @@ const init_create_doctor_button = () => {
     document.querySelector("aside").innerHTML += button_template
     document.querySelector("#create-doctor-button").onclick = ev => {
         load_form()
+        document.querySelector("#companions").innerHTML = ``
     }
 }
 
@@ -238,6 +251,7 @@ const post_or_patch_new_doctor = (name, seasons, ordering, image_url, patch_id) 
         address = '/doctors'
     }
     console.log(command + " doctor")
+    console.log(address)
     fetch(address, {
         method: command,
         headers: {
