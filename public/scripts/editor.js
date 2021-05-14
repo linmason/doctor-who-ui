@@ -100,7 +100,8 @@ const delete_doctor = (doctor_id) => {
             .then(data => {
                 console.log(data)
                 load_doctors()
-                document.querySelector("#doctor").innerHTML = `selected doctor goes here`
+                document.querySelector("#doctor").innerHTML = `Selected doctor goes here`
+                document.querySelector("#companions").innerHTML = `Selected doctor's companions goes here`
             })
     }
     else {
@@ -178,6 +179,7 @@ const load_form = (patch_id=false) => {
         <button class="btn" id="cancel">Cancel</button>
     </form>
     `
+    document.querySelector("#companions").innerHTML = ``
     document.querySelector("#doctor").innerHTML = form_template
     document.querySelector("#create").onclick = ev => {
         //check for validity
