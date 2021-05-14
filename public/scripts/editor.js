@@ -105,6 +105,7 @@ const delete_doctor = (doctor_id) => {
     }
     else {
         load_doctor_page(doctor_id)
+        load_companions_page(doctor_id)
     }
 }
 
@@ -205,6 +206,7 @@ const load_form = (patch_id=false) => {
     document.querySelector("#cancel").onclick = ev => {
         if (patch_id) {
             load_doctor_page(patch_id)
+            load_companions_page(patch_id)
             return false
         }
         else {
@@ -265,6 +267,7 @@ const post_or_patch_new_doctor = (name, seasons, ordering, image_url, patch_id) 
                 console.log(json_data)
                 load_doctors()
                 load_doctor_page(json_data._id)
+                load_companions_page(json_data._id)
             })
         })
 }
