@@ -67,6 +67,7 @@ const render_doctor = (doctor_obj) => {
     }
     document.querySelector("#delete").onclick = ev => {
         console.log("delete")
+        delete_doctor(ev.srcElement.dataset.id)
     }
 }
 
@@ -81,6 +82,28 @@ const load_doctor_edit = (doctor_id) => {
             document.querySelector("#ordering").value = (data.ordering? data.ordering : "")
             document.querySelector("#image_url").value = (data.image_url? data.image_url : "")
         })
+}
+
+const delete_doctor = (doctor_id) => {
+    let result = window.confirm("Delete This Doctor?")
+    if (result) {
+        fetch(`/doctors/${doctor_id}`,
+            {
+                method: 'delete',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+            .then(data => {
+                load_doctors()
+                document.querySelector("#doctor").innerHTML = `selected doctor goes here`
+            })
+    }
+    else {
+        load_doctor_page(doctor_id)
+    }
 }
 
 const load_companions_page = (doctor_id) => {
